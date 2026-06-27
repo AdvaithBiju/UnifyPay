@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "min_app_version_code": 1,
+  "routing_rules": [
+    { "sender_contains": ["HDFC"], "parser": "hdfc" },
+    { "sender_contains": ["ICICI"], "parser": "icici" },
+    { "sender_contains": ["SBI", "SBMSMS"], "parser": "generic" },
+    { "sender_contains": ["AXIS"], "parser": "generic" },
+    { "sender_contains": ["SIBSMS", "SIB-"], "parser": "southindian" },
+    { "sender_contains": ["KOTAKB"], "parser": "generic" },
+    { "sender_contains": ["INDBNK"], "parser": "generic" },
+    { "sender_contains": ["YESBK"], "parser": "generic" },
+    { "sender_contains": ["FEDERAL"], "parser": "generic" },
+    { "sender_contains": ["PAYTM"], "parser": "generic" },
+    { "sender_contains": ["PHONEPE"], "parser": "generic" },
+    { "sender_contains": ["CANARA", "CNRBNK"], "parser": "generic" }
+  ],
+  "pre_filter": {
+    "otp_pattern": "\\bOTP\\b|\\bone.?time\\s*pass",
+    "url_pattern": "(?:https?://|www\\.|(?:[a-zA-Z0-9-]+\\.)+[a-z]{2,}/)",
+    "balance_keywords": ["balance", "bal"],
+    "trans_keywords": [
+      "debit", "credit", "debited", "credited", "spent", "sent",
+      "received", "transaction", "paid", "upi debit", "upi credit",
+      "withdrawal", "payment", "dr."
+    ],
+    "promo_keywords": [
+      "offer", "win", "discount", "free", "loan", "apply now",
+      "click", "expires", "off", "gift", "plan", "visit", "enjoy",
+      "connection", "postpaid", "prepaid", "recharge offer",
+      "upgrade", "activate", "bonus", "reward", "cashback"
+    ],
+    "statement_keywords": ["minimum due", "payment due", "statement", "bill generated"],
+    "trans_verbs": [
+      "debited", "credited", "spent", "paid", "deducted", "received",
+      "deposited", "transferred", "recharged", "auto-debit", "emi",
+      "withdrawal", "payment successful"
+    ],
+    "ref_patterns": ["RRN", "Ref No", "UTR", "Txn ID", "UPI Ref", "Transaction ID", "Ref", "Txn"]
+  },
+  "transaction_types": {
+    "debit_verbs": [
+      "debited", "deducted", "spent", "sent", "debit", "paid",
+      "payment successful", "dr."
+    ],
+    "credit_verbs": ["credited", "received", "deposited", "credit", "refund"]
+  },
+  "reference_patterns": [
+    "RRN\\s*:\\s*([a-zA-Z0-9]+)",
+    "Ref\\s*No\\s*([a-zA-Z0-9]+)",
+    "UTR\\s*:\\s*([a-zA-Z0-9]+)",
+    "Txn\\s*ID\\s*:\\s*([a-zA-Z0-9]+)",
+    "UPI\\s*Ref\\s*:\\s*([a-zA-Z0-9]+)",
+    "Transaction\\s*ID\\s*([a-zA-Z0-9]+)",
+    "Ref\\s*([a-zA-Z0-9]{6,})",
+    "UPI\\s*:\\s*([0-9]{6,})"
+  ],
+  "merchant_categories": {
+    "Food": ["zomato", "swiggy", "restaurant", "cafe", "food", "pizza", "biryani", "dine"],
+    "Travel": ["uber", "ola", "rapido", "metro", "bus", "train", "irctc", "cab", "auto", "petrol", "pump", "fuel", "bp", "shell", "ioc"],
+    "Bills": ["electricity", "bescom", "bsnl", "airtel", "jio", "broadband", "recharge"],
+    "Shopping": ["amazon", "flipkart", "myntra", "shop", "store", "mart"],
+    "Health": ["pharmacy", "hospital", "clinic", "medplus", "apollo"]
+  }
+}

@@ -1,8 +1,8 @@
 {
-  "version": 2,
+  "version": 3,
   "min_app_version_code": 1,
-  "latest_version_code": 9,
-  "update_message": "",
+  "latest_version_code": 10,
+  "update_message": "v3: fixed false positives (postpaid/prepaid substring match on 'paid', demat/securities balance SMS, shortlink promo SMS)",
   "routing_rules": [
     { "sender_contains": ["HDFC"], "parser": "hdfc" },
     { "sender_contains": ["ICICI"], "parser": "icici" },
@@ -20,29 +20,47 @@
   "pre_filter": {
     "otp_pattern": "\\bOTP\\b|\\bone.?time\\s*pass",
     "url_pattern": "(?:https?://|www\\.|(?:[a-zA-Z0-9-]+\\.)+[a-z]{2,}/)",
+    "shortlink_domains": [
+      "cutt.ly", "bit.ly", "tinyurl.com", "is.gd", "rebrand.ly",
+      "t.co", "rb.gy", "shorturl.at", "tiny.cc", "lnkd.in"
+    ],
     "balance_keywords": ["balance", "bal"],
     "trans_keywords": [
       "debit", "credit", "debited", "credited", "spent", "sent",
-      "received", "transaction", "paid", "upi debit", "upi credit",
-      "withdrawal", "payment", "dr."
+      "received", "transaction", "upi debit", "upi credit",
+      "withdrawal", "payment successful", "dr."
     ],
     "promo_keywords": [
       "offer", "win", "discount", "free", "loan", "apply now",
       "click", "expires", "off", "gift", "plan", "visit", "enjoy",
       "connection", "postpaid", "prepaid", "recharge offer",
-      "upgrade", "activate", "bonus", "reward", "cashback"
+      "upgrade", "activate", "bonus", "reward", "cashback",
+      "explore now", "smart mobile hack", "hack:"
+    ],
+    "non_transaction_keywords": [
+      "days position", "fa bal", "click view", "securities name",
+      "securities", "nav", "units allotted", "folio"
     ],
     "statement_keywords": ["minimum due", "payment due", "statement", "bill generated"],
     "trans_verbs": [
-      "debited", "credited", "spent", "paid", "deducted", "received",
+      "debited", "credited", "spent", "deducted", "received",
       "deposited", "transferred", "recharged", "auto-debit", "emi",
       "withdrawal", "payment successful"
     ],
-    "ref_patterns": ["RRN", "Ref No", "UTR", "Txn ID", "UPI Ref", "Transaction ID", "Ref", "Txn"]
+    "ref_patterns": ["RRN", "Ref No", "UTR", "Txn ID", "UPI Ref", "Transaction ID", "Ref", "Txn"],
+    "classification_order": [
+      "otp_pattern",
+      "non_transaction_keywords",
+      "shortlink_no_ref_check",
+      "promo_keywords",
+      "statement_keywords",
+      "trans_keywords"
+    ],
+    "shortlink_no_ref_rule": "If message matches any shortlink_domains AND contains none of ref_patterns, classify as non-transaction regardless of trans_keywords matches."
   },
   "transaction_types": {
     "debit_verbs": [
-      "debited", "deducted", "spent", "sent", "debit", "paid",
+      "debited", "deducted", "spent", "sent", "debit",
       "payment successful", "dr."
     ],
     "credit_verbs": ["credited", "received", "deposited", "credit", "refund"]

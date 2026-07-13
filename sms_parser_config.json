@@ -1,7 +1,7 @@
 {
   "version": 3,
   "min_app_version_code": 1,
-  "latest_version_code": 13,
+  "latest_version_code": 14,
   "update_message": "New version available: smarter SMS detection (fewer misclassified transactions), a notifications permission prompt on setup, and bug fixes. Update now!",
   "routing_rules": [
     { "sender_contains": ["HDFC"], "parser": "hdfc" },

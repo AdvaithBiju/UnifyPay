@@ -1,8 +1,8 @@
 {
   "version": 3,
   "min_app_version_code": 1,
-  "latest_version_code": 10,
-  "update_message": "v3: fixed false positives (postpaid/prepaid substring match on 'paid', demat/securities balance SMS, shortlink promo SMS)",
+  "latest_version_code": 13,
+  "update_message": "New version available: smarter SMS detection (fewer misclassified transactions), a notifications permission prompt on setup, and bug fixes. Update now!",
   "routing_rules": [
     { "sender_contains": ["HDFC"], "parser": "hdfc" },
     { "sender_contains": ["ICICI"], "parser": "icici" },

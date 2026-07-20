@@ -1,8 +1,8 @@
 {
-  "version": 3,
-  "min_app_version_code": 1,
-  "latest_version_code": 14,
-  "update_message": "New version available: smarter SMS detection (fewer misclassified transactions), a notifications permission prompt on setup, and bug fixes. Update now!",
+  "version": 4,
+  "min_app_version_code": 15,
+  "latest_version_code": 15,
+  "update_message": "New version: smarter scam/promo detection using a trust-weighted scoring model instead of keyword blocklists. Update now!",
   "routing_rules": [
     { "sender_contains": ["HDFC"], "parser": "hdfc" },
     { "sender_contains": ["ICICI"], "parser": "icici" },
@@ -48,6 +48,7 @@
       "withdrawal", "payment successful"
     ],
     "ref_patterns": ["RRN", "Ref No", "UTR", "Txn ID", "UPI Ref", "Transaction ID", "Ref", "Txn"],
+    "outcome_reject_patterns": ["declined", "has failed", "was not successful", "reversed", "unsuccessful", "transaction failed"],
     "classification_order": [
       "otp_pattern",
       "non_transaction_keywords",
@@ -58,12 +59,48 @@
     ],
     "shortlink_no_ref_rule": "If message matches any shortlink_domains AND contains none of ref_patterns, classify as non-transaction regardless of trans_keywords matches."
   },
+  "sender_classification": {
+    "enabled": true,
+    "enforce_promotional_suffix_reject": false,
+    "dlt_suffix_pattern": "-([A-Z])$",
+    "promotional_suffixes": ["P"],
+    "service_suffixes": ["S", "T"],
+    "government_suffixes": ["G"]
+  },
+  "scoring": {
+    "enabled": true,
+    "threshold_trusted_sender": 6,
+    "threshold_untrusted_sender": 8,
+    "min_reference_length": 4,
+    "future_tense_patterns": [
+      "will\\s+be\\s+(credited|debited)",
+      "shall\\s+be\\s+(credited|debited)",
+      "to\\s+be\\s+deducted",
+      "is\\s+due\\s+on"
+    ],
+    "amount_negative_context": ["worth", "off", "up to", "upto", "starting at", "@", "plan at", "only rs", "flat"],
+    "weights": {
+      "known_bank_sender": 3,
+      "explicit_debited_credited_verb": 5,
+      "valid_reference_number": 4,
+      "account_mask_present": 3,
+      "amount_present_unnegated": 2,
+      "generic_transaction_verb": 2,
+      "balance_with_verb": 1,
+      "url_present": -3,
+      "shortlink_domain": -5,
+      "promo_keyword": -3,
+      "amount_negative_context_hit": -4,
+      "unknown_sender": -2,
+      "future_tense_hit": -6
+    }
+  },
   "transaction_types": {
     "debit_verbs": [
-      "debited", "deducted", "spent", "sent", "debit",
+      "debited", "deducted", "spent", "sent",
       "payment successful", "dr."
     ],
-    "credit_verbs": ["credited", "received", "deposited", "credit", "refund"]
+    "credit_verbs": ["credited", "received", "deposited", "refund"]
   },
   "reference_patterns": [
     "RRN\\s*:\\s*([a-zA-Z0-9]+)",

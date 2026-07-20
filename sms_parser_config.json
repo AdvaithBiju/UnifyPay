@@ -1,8 +1,8 @@
 {
   "version": 4,
   "min_app_version_code": 15,
-  "latest_version_code": 16,
-  "update_message": "TEST MESSAGE — please ignore. This confirms the remote-config update prompt is working. No real update is available.",
+  "latest_version_code": 14,
+  "update_message": "New version available: smarter SMS detection (fewer misclassified transactions), a notifications permission prompt on setup, and bug fixes. Update now!",
   "routing_rules": [
     { "sender_contains": ["HDFC"], "parser": "hdfc" },
     { "sender_contains": ["ICICI"], "parser": "icici" },

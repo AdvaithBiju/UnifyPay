@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 5,
   "min_app_version_code": 15,
   "latest_version_code": 14,
   "update_message": "New version available: smarter SMS detection (fewer misclassified transactions), a notifications permission prompt on setup, and bug fixes. Update now!",
@@ -57,7 +57,12 @@
       "statement_keywords",
       "trans_keywords"
     ],
-    "shortlink_no_ref_rule": "If message matches any shortlink_domains AND contains none of ref_patterns, classify as non-transaction regardless of trans_keywords matches."
+    "shortlink_no_ref_rule": "If message matches any shortlink_domains AND contains none of ref_patterns, classify as non-transaction regardless of trans_keywords matches.",
+    "emi_keywords": ["emi", "instalment", "installment"],
+    "emi_auto_debit_keywords": ["auto-debit", "ecs"],
+    "cc_bill_keywords": ["payment received", "card"],
+    "internal_transfer_keywords": ["self transfer", "own account", "sweep"],
+    "account_mask_pattern": "(?:Ac|A/c|Account|A/C)\\s*(?:ending)?\\s*[xX]*(\\d{4})\\b"
   },
   "sender_classification": {
     "enabled": true,
@@ -118,5 +123,18 @@
     "Bills": ["electricity", "bescom", "bsnl", "airtel", "jio", "broadband", "recharge"],
     "Shopping": ["amazon", "flipkart", "myntra", "shop", "store", "mart"],
     "Health": ["pharmacy", "hospital", "clinic", "medplus", "apollo"]
+  },
+  "name_extraction": {
+    "technical_prefix_blacklist": ["acct", "account", "vpa", "upi", "ref", "rrn", "txn"],
+    "truncation_keywords": ["on", "via", "ref", "rrn", "at", "to", "from", "for", "towards", "info", "upi", "credited", "debited", "using"],
+    "patterns": [
+      { "capture_regex": ";\\s*(.+)", "direction": "any" },
+      { "capture_regex": "(?:debited|deducted|spent|paid|sent|transaction|payment\\s+successful|dr\\.).*?(?:to|at|towards|info|for(?!\\s*(?:Rs|INR|₹|\\$|EUR|GBP|\\d)))\\s+(?!your\\b|my\\b|\\d{4,})(.+)", "direction": "debit" },
+      { "capture_regex": "(?:credited|received).*?(?:from|by(?!\\s*(?:transfer|neft|rtgs|imps|cheque|chq)))\\s+(?!your\\b|my\\b|\\d{4,})(.+)", "direction": "credit" },
+      { "capture_regex": "\\bat\\s+(?!your\\b|my\\b|\\d{4,})(.+)", "direction": "any" },
+      { "capture_regex": "\\bto\\s+(?!your\\b|my\\b|\\d{4,})(.+)", "direction": "debit" },
+      { "capture_regex": "\\bfrom\\s+(?!your\\b|my\\b|\\d{4,})(.+)", "direction": "credit" }
+    ],
+    "truncation_cleanup": { "enabled": true, "max_fragment_length": 3 }
   }
 }

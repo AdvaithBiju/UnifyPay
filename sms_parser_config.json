@@ -1,8 +1,8 @@
 {
   "version": 5,
   "min_app_version_code": 15,
-  "latest_version_code": 14,
-  "update_message": "New version available: smarter SMS detection (fewer misclassified transactions), a notifications permission prompt on setup, and bug fixes. Update now!",
+  "latest_version_code": 17,
+  "update_message": "New version available: fixed a bug where receiving money could wrongly trigger your daily spending limit, a redesigned Add Transaction screen, and other improvements. Update now!",
   "routing_rules": [
     { "sender_contains": ["HDFC"], "parser": "hdfc" },
     { "sender_contains": ["ICICI"], "parser": "icici" },
